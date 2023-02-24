@@ -28,8 +28,30 @@ angular.module('market-front').controller('storeController', function ($scope, $
     $scope.addToCart = function (productId) {
         $http.get('http://localhost:5555/cart/api/v1/cart/' + $localStorage.springWebGuestCartId + '/add/' + productId)
             .then(function (response) {
-            });
+            }, function errorCallback(response) {
+                    console.log(response);
+                    if(response.data.message=="Core service error"){
+                        alert("Core service error");
+                    }
+              }
+            );
     }
+
+     $scope.addToCartUnknownProduct = function () {
+            $http.get('http://localhost:5555/cart/api/v1/cart/' + $localStorage.springWebGuestCartId + '/add/' + 99)
+                .then(function (response) {
+                }, function errorCallback(response) {
+                        console.log(response);
+                        if(response.data.message=="Core service error"){
+                            alert("Core service error");
+                        }
+                        if(response.data.message=="Product not found"){
+                            alert("Продукт не найден");
+
+                        }
+                  }
+                );
+        }
 
     $scope.loadProducts();
 });
